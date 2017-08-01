@@ -9,6 +9,12 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Files;
+use app\models\FilesTags;
+use app\forms\UploadForm;
+use yii\web\UploadedFile;
+use yii\data\ActiveDataProvider;
+use yii\web\NotFoundHttpException;
 
 class SiteController extends Controller
 {
@@ -55,14 +61,50 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
+     * Displays homepage with uplads and list.
      *
      * @return string
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $model = new UploadForm();
+        $dataProvider = new ActiveDataProvider([
+            'query' => Files::find(),
+        ]);
+
+        if (Yii::$app->request->post() != null) {
+            $model->XMLfiles = UploadedFile::getInstances($model, 'XMLfiles');
+
+            if ($model->XMLfiles != null) {
+                if ($model->upload()) {
+                    return $this->redirect(['index']);
+                }
+            }
+        } else {
+            return $this->render('index', compact('model', 'dataProvider'));
+        }
     }
+
+
+    /**
+     * Displays FileDetails.
+     *
+     * @return string
+     */
+    public function actionView($id)
+    {
+        $model = Files::findOne($id);
+        if ($model !== null) {
+                $dataProvider = new ActiveDataProvider([
+            'query' => $model->getFilesTags(),
+                ]);
+            return $this->render('view', compact('model', 'dataProvider'));
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+
 
     /**
      * Login action.
