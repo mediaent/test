@@ -23,7 +23,7 @@ class UploadForm extends Model
     public function rules()
     {
         return [
-            [['XMLfiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'xml', 'maxFiles' => 1],
+            [['XMLfiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'xml', 'mimeTypes'=> 'application/xml', 'maxFiles' => 1],
         ];
     }
 
