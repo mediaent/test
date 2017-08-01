@@ -31,9 +31,8 @@ class m170801_115427_add_filesxml extends Migration
 
     public function safeDown()
     {
-        echo "m170801_115427_add_filesxml cannot be reverted.\n";
-
-        return false;
+        $this->dropTable('files_tags');
+        $this->dropTable('files');
     }
 
     /*
