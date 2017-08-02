@@ -70,6 +70,7 @@ class SiteController extends Controller
         $model = new UploadForm();
         $dataProvider = new ActiveDataProvider([
             'query' => Files::find(),
+            'sort'=> ['defaultOrder' => ['create_at'=>SORT_ASC]]
         ]);
 
         if (Yii::$app->request->post() != null) {
@@ -97,6 +98,7 @@ class SiteController extends Controller
         if ($model !== null) {
                 $dataProvider = new ActiveDataProvider([
             'query' => $model->getFilesTags(),
+            'sort'=> ['defaultOrder' => ['tag_name'=>SORT_ASC]]
                 ]);
             return $this->render('view', compact('model', 'dataProvider'));
         } else {
